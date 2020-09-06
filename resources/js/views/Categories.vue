@@ -63,11 +63,17 @@
                     <div class="form-group">
                         <label for="name">Name : </label>
                         <input type="text" class="form-control" id="name" v-model="categoryData.name" placeholder="Enter name">
+                        <div class="invalid-feedback" v-if="errors.name">{{ errors.name[0] }}</div>
                     </div>
     
                     <div class="form-group">
                         <label for="image">Image : </label>
-                        <input type="file" class="form-control" id="image" v-on:change="attachImage">
+                        <input type="file" class="form-control" id="image" v-on:change="attachImage" ref="newCategoryImage">
+                        <div class="invalid-feedback" v-if="errors.image">{{ errors.image[0] }}</div>
+                        <br>
+                        <div v-if="categoryData.image.name">
+                            <img src="" ref="newCategoryImageDisplay" class="w-150px">
+                        </div>
                     </div>
     
                     <hr>
@@ -83,6 +89,8 @@
 </template>
 
 <script>
+    import * as categoryServices from '../services/category_service';
+
     export default {
         name: "categories",
         data(){
@@ -91,13 +99,22 @@
                 categoryData: {
                     name: "",
                     image: ""
-                }
+                },
+
+                errors: {}
             }
         },
         
         methods: {
             attachImage: function(){
                 //to use some file todo
+                this.categoryData.image = this.$refs.newCategoryImage.files[0];
+                let reader = new FileReader();
+                reader.addEventListener('load', function () {
+                    this.$refs.newCategoryImageDisplay.src = reader.result;
+                }.bind(this),false)
+
+                reader.readAsDataURL(this.categoryData.image);
             },
     
             hideNewcategoryModal: function(){
@@ -110,9 +127,31 @@
               this.$refs.newCategoryModal.show();
             },
     
-            createCategory: function(){
-                // store category into databse
+            createCategory: async function(){
+                // store category into database
                 console.log("From Submitted");
+
+                let formData = new FormData();
+
+                formData.append('name', this.categoryData.name);
+                formData.append('image', this.categoryData.image);
+
+                try{
+                    const response = await categoryServices.createCategories(formData);
+                    console.log(response);
+                    this.hideNewcategoryModal();
+                }catch(error) {
+                    switch (error.response.status)
+                    {
+                        case 422:
+                            this.errors = error.response.data.errors;
+                            break;
+
+                        default:
+                            alert('some wrong');
+                            break;
+                    }
+                }
             }
         }
     }

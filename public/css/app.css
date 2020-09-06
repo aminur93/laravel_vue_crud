@@ -11247,3 +11247,11 @@ body {
   background-color: rgba(0, 0, 0, 0.5) !important;
 }
 
+.w-150px {
+  width: 150px !important;
+}
+
+.invalid-feedback {
+  display: inline-block !important;
+}
+

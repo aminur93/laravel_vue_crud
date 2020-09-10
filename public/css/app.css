@@ -11255,3 +11255,7 @@ body {
   display: inline-block !important;
 }
 
+.image-table {
+  width: 100px;
+}
+

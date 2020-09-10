@@ -12,6 +12,8 @@
                 <spa-footer></spa-footer>
             </div>
         </div>
+
+        <FlashMessage :position="'right bottom'"></FlashMessage>
     </div>
 </template>
 

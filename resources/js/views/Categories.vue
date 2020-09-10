@@ -38,17 +38,29 @@
                                     </tr>
                                     </tfoot>
                                     <tbody>
-                                    <tr>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
+                                    <tr v-for="(category,index) in categories" :key="index">
+                                        <td>{{ index + 1 }}</td>
+                                        <td>{{ category.name }}</td>
                                         <td>
-                                            <button class="btn btn-sm btn-primary"><span class="fa fa-edit"></span></button>
-                                            <button class="btn btn-sm btn-danger"><span class="fa fa-trash"></span></button>
+                                            <img :src="`${$store.state.serverPath}/storage/${category.image}`" :alt="category.name" class="image-table">
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" v-on:click="editCategory(category)">
+                                                <span class="fa fa-edit"></span>
+                                            </button>
+                                            <button class="btn btn-sm btn-danger" v-on:click="deleteCategory(category)">
+                                                <span class="fa fa-trash"></span>
+                                            </button>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
+
+                                <div class="text-center" v-show="moreExist">
+                                    <button class="btn btn-primary" v-on:click="loadMore"><span class="fa fa-arrow-down"></span> Load More</button>
+                                </div>
+
+
                             </div>
                         </div>
                     </div>
@@ -85,6 +97,35 @@
                 </form>
             </div>
         </b-modal>
+
+        <b-modal ref="editCategoryModal" hide-footer title="Edit category">
+            <div class="d-block">
+                <form v-on:submit.prevent="updateCategory">
+                    <div class="form-group">
+                        <label for="name">Name : </label>
+                        <input type="text" class="form-control" id="name" v-model="editCategoryData.name" placeholder="Enter name">
+                        <div class="invalid-feedback" v-if="errors.name">{{ errors.name[0] }}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image">Image : </label>
+                        <input type="file" class="form-control" id="image" v-on:change="editAttachImage" ref="editCategoryImage">
+                        <div class="invalid-feedback" v-if="errors.image">{{ errors.image[0] }}</div>
+                        <br>
+                        <div>
+                            <img :src="`${$store.state.serverPath}/storage/${editCategoryData.image}`" ref="editCategoryImageDisplay" class="w-150px">
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="text-right">
+                        <button type="button" class="btn btn-default" v-on:click="hideEditCategoryModal">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><span class="fa fa-check"></span> Edit</button>
+                    </div>
+                </form>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -96,16 +137,45 @@
         data(){
             return{
                 comName: "Category",
+                categories: [],
                 categoryData: {
                     name: "",
                     image: ""
                 },
-
-                errors: {}
+                moreExist: false,
+                nextPage: 0,
+                editCategoryData: {},
+                errors: {},
             }
+        },
+
+        mounted()
+        {
+            this.loadCategories();
         },
         
         methods: {
+            loadCategories: async function(){
+
+                try {
+                    const response = await categoryServices.loadCategories();
+                    this.categories = response.data.data;
+
+                    if(response.data.current_page < response.data.last_page)
+                    {
+                        this.moreExist = true;
+                        this.nextPage = response.data.current_page + 1;
+                    }else {
+                        this.moreExist = false;
+                    }
+                }catch (error){
+                    this.flashMessage.error({
+                        message: 'Category Data Not Found',
+                        time: 5000
+                    });
+                }
+            },
+
             attachImage: function(){
                 //to use some file todo
                 this.categoryData.image = this.$refs.newCategoryImage.files[0];
@@ -129,7 +199,6 @@
     
             createCategory: async function(){
                 // store category into database
-                console.log("From Submitted");
 
                 let formData = new FormData();
 
@@ -138,8 +207,17 @@
 
                 try{
                     const response = await categoryServices.createCategories(formData);
-                    console.log(response);
+
+                    this.loadCategories();
+
                     this.hideNewcategoryModal();
+
+                    this.flashMessage.success({
+                        message: response.data.message,
+                        time: 5000
+                    });
+                    this.categoryData.name = '';
+                    this.categoryData.image = '';
                 }catch(error) {
                     switch (error.response.status)
                     {
@@ -148,9 +226,118 @@
                             break;
 
                         default:
-                            alert('some wrong');
+                            this.flashMessage.error({
+                                message: 'Something Went Wrong',
+                                time: 5000
+                            });
                             break;
                     }
+                }
+            },
+
+            deleteCategory: async function (category) {
+                if (!window.confirm(`Are you sure want to delete ${category.name}`))
+                {
+                    return;
+                }
+
+                try {
+                    const response = await categoryServices.deleteCategory(category.id);
+                    this.loadCategories();
+                    this.flashMessage.success({
+                        message: response.data.message,
+                        time: 5000
+                    });
+                }catch (error){
+                    this.flashMessage.error({
+                        message: error.response.data.message,
+                        time: 5000
+                    });
+                }
+            },
+
+            hideEditCategoryModal: function () {
+                this.$refs.editCategoryModal.hide();
+            },
+
+            showEditCategoryModal: function () {
+                this.$refs.editCategoryModal.show();
+            },
+
+
+
+            editCategory: function(category){
+                this.editCategoryData = category;
+                this.showEditCategoryModal();
+            },
+
+            editAttachImage: function () {
+                this.editCategoryData.image = this.$refs.editCategoryImage.files[0];
+                let reader = new FileReader();
+                reader.addEventListener('load', function () {
+                    this.$refs.editCategoryImageDisplay.src = reader.result;
+                }.bind(this),false);
+
+                reader.readAsDataURL(this.editCategoryData.image);
+            },
+
+            updateCategory: async function () {
+                console.log('update category');
+
+                let formData = new FormData();
+                formData.append('name', this.editCategoryData.name);
+                formData.append('image', this.editCategoryData.image);
+                formData.append('_method','put');
+
+                try {
+                    const response = await categoryServices.updateCategory(this.editCategoryData.id, formData);
+
+                    this.categories.map(category => {
+                        if (category.id == response.data.id)
+                        {
+                            for (let key in response.data)
+                            {
+                                category[key] = response.data[key];
+                            }
+                        }
+                    });
+
+                    this.hideEditCategoryModal();
+
+                    this.flashMessage.success({
+                        message: response.data.message,
+                        time: 5000
+                    });
+
+                    this.loadCategories();
+
+                }catch (error){
+                    this.flashMessage.error({
+                        message: error.response.data.message,
+                        time: 5000
+                    });
+                }
+            },
+
+            loadMore: async function(){
+                try{
+                    const response = await categoryServices.loadMore(this.nextPage);
+                    if(response.data.current_page < response.data.last_page)
+                    {
+                        this.moreExist = true;
+                        this.nextPage = response.data.current_page + 1;
+                    }else {
+                        this.moreExist = false;
+                    }
+
+                    response.data.data.forEach(data =>{
+                        this.categories.push(data);
+                    });
+                }catch (error){
+                    this.flashMessage.error({
+                        message: 'Some Error',
+                        time: 5000
+                    });
                 }
             }
         }

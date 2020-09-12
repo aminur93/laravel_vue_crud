@@ -134,6 +134,10 @@
 
     export default {
         name: "categories",
+//        created()
+//        {
+//            document.querySelector('body').style.backgroundColor = '#fff';
+//        },
         data(){
             return{
                 comName: "Category",
@@ -216,6 +220,7 @@
                         message: response.data.message,
                         time: 5000
                     });
+
                     this.categoryData.name = '';
                     this.categoryData.image = '';
                 }catch(error) {

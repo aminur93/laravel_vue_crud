@@ -1,6 +1,6 @@
 <template>
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-        <a class="navbar-brand" href="index.html">Laravel Vue SPA</a>
+        <a class="navbar-brand" href="index.html">{{ $store.state.profile.name }}</a>
         <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
         <!-- Navbar Search-->
         <form class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
@@ -19,7 +19,7 @@
                     <a class="dropdown-item" href="#">Settings</a>
                     <a class="dropdown-item" href="#">Profile</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="">Logout</a>
+                    <button class="dropdown-item" v-on:click="logout">Logout</button>
                 </div>
             </li>
         </ul>
@@ -27,7 +27,16 @@
 </template>
 
 <script>
+    import * as authServices from '../services/auth_services';
+
     export default {
+        
+        methods: {
+            logout: async function () {
+                authServices.logout();
+                this.$router.push('/login');
+            }
+        }
     }
 </script>
 

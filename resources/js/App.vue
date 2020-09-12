@@ -1,33 +1,28 @@
 <template>
     <div>
-        <spa-header></spa-header>
-        
-        <div id="layoutSidenav">
-            <spa-sidebar></spa-sidebar>
-            
-            <div id="layoutSidenav_content">
-                
-                <router-view></router-view>
-    
-                <spa-footer></spa-footer>
-            </div>
-        </div>
+        <router-view></router-view>
 
         <FlashMessage :position="'right bottom'"></FlashMessage>
     </div>
 </template>
 
 <script>
-    import Header from './components/Header.vue'
-    import Sidebar from './components/Sidebar.vue'
-    import Footer from './components/Footer.vue'
+
+    import * as authServices from './services/auth_services';
+
     export default {
-        components: {
-            "spa-header" : Header,
-            "spa-sidebar" : Sidebar,
-            "spa-footer" : Footer
-        },
-        name: "app"
+        name: "app",
+        beforeCreate: async function(){
+            try {
+                if (authServices.isLoogedIn())
+                {
+                    const response = await authServices.getProfile();
+                    this.$store.dispatch('authenticate', response.data);
+                }
+            }catch(error){
+                authServices.logout();
+            }
+        }
     }
 </script>
 

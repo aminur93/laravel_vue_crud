@@ -4,15 +4,20 @@
             <div class="sb-sidenav-menu">
                 <div class="nav">
                     <div class="sb-sidenav-menu-heading">Core</div>
-                    <router-link to="/" class="nav-link" exact>
+                    <router-link to="/home" class="nav-link" exact>
                         <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                         Dashboard
                     </router-link>
                     <div class="sb-sidenav-menu-heading">Interface</div>
     
-                    <router-link to="/category" class="nav-link" exact>
+                    <router-link to="/home/category" class="nav-link" exact>
                         <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                         Category
+                    </router-link>
+
+                    <router-link to="/home/products" class="nav-link" exact>
+                        <div class="sb-nav-link-icon"><i class="fas fa-store"></i></div>
+                        Products
                     </router-link>
                     
                 </div>

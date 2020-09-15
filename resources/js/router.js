@@ -23,13 +23,29 @@ const routes = [
             {
                 path: 'category',
                 name: 'category',
-                component: () => import('./views/Categories.vue')
+                component: () => import('./views/Categories.vue'),
+                beforeEnter(to, from, next){
+                    if(authService.getUserRole() === 'user')
+                    {
+                        next();
+                    }else {
+                        next('/404');
+                    }
+                }
             },
 
             {
                 path: 'products',
                 name: 'products',
-                component: () => import('./views/Products.vue')
+                component: () => import('./views/Products.vue'),
+                beforeEnter(to, from, next){
+                    if(authService.getUserRole() === 'admin')
+                    {
+                        next();
+                    }else {
+                        next('/404');
+                    }
+                }
             },
         ],
 
@@ -64,10 +80,38 @@ const routes = [
     },
 
     {
-        path: '/reset-password',
-        name: 'reset-password',
-        component: () => import('./views/authentication/ResetPassword.vue')
+        path: '/reset-password-request',
+        name: 'reset-password-request',
+        component: () => import('./views/authentication/ResetPasswordRequest.vue'),
+        beforeEnter(to, from, next){
+            if(!authService.isLoogedIn())
+            {
+                next();
+            }else {
+                next('/home');
+            }
+        }
     },
+
+    {
+        path: '/reset-password/:email',
+        name: 'reset-password',
+        component: () => import('./views/authentication/ResetPassword.vue'),
+        beforeEnter(to, from, next){
+            if(!authService.isLoogedIn())
+            {
+                next();
+            }else {
+                next('/home');
+            }
+        }
+    },
+
+    {
+        path: '*',
+        name: '404',
+        component: () => import('./views/404.vue')
+    }
 ];
 
 const router = new VueRouter({

@@ -109,4 +109,9 @@ class AuthController extends Controller
             'status_code' => 500
         ],500);
     }
+
+    public function resetPasswordRequest()
+    {
+
+    }
 }

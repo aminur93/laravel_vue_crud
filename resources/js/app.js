@@ -11,6 +11,9 @@ Vue.use(BootstrapVue);
 import FlashMessage from '@smartweb/vue-flash-message';
 Vue.use(FlashMessage);
 
+import excel from 'vue-excel-export'
+Vue.use(excel);
+
 new Vue({
     el: '#app',
     render: h => h(App),

@@ -15,6 +15,10 @@
 
                             <div class="text-right">
                                 <button type="button" v-on:click="showNewProductModal"><span class="fa fa-plus"></span> Create New</button>
+                                <button type="button" v-on:click="importProductModal" class="btn btn-primary"><i class="fas fa-file-import"></i> Import Product</button>
+
+                                 <a v-on:click="exportProductData()" class="btn btn-info"><span class="fa fa-cloud"></span> Export Excel</a>
+
                             </div>
                         </div>
 
@@ -110,6 +114,26 @@
             </div>
         </b-modal>
 
+        <b-modal ref="newImportProductModal" hide-footer title="Import  Product">
+            <div class="d-block">
+                <form v-on:submit.prevent="importProducts">
+
+                    <div class="form-group">
+                        <label for="import">Import : </label>
+                        <input type="hidden" ref="importFile">
+                        <input type="file" name="import_file" id="import" v-on:change="uploadExcel($event)" ref="importProductExcel" class="form-control">
+                    </div>
+
+                    <hr>
+
+                    <div class="text-right">
+                        <button type="button" class="btn btn-default" v-on:click="importHideproductModal">Cancel</button>
+                        <button type="submit" class="btn btn-primary"><span class="fa fa-check"></span> Import Now</button>
+                    </div>
+                </form>
+            </div>
+        </b-modal>
+
         <b-modal ref="EditProductModal" hide-footer title="Update Product">
             <div class="d-block">
                 <form v-on:submit.prevent="updateProduct">
@@ -165,6 +189,12 @@
                     image: ''
                 },
                 moreExist: false,
+                importData: {
+                    import_file: '',
+                },
+
+                fileName: '',
+
                 nextPage: 0,
                 editProductData: {},
                 errors: {},
@@ -174,10 +204,26 @@
         mounted()
         {
             this.loadCategories();
+
+        },
+
+        created(){
             this.loadProducts();
         },
 
         methods: {
+
+            exportProductData: async function()
+            {
+                try{
+                    await productServices.exportExcel();
+                }catch (error){
+                    this.flashMessage.error({
+                        message: error.response.data.message,
+                        time: 5000
+                    });
+                }
+            },
 
             loadCategories: async function()
             {
@@ -235,6 +281,50 @@
             showNewProductModal: function(){
                 //show Modal
                 this.$refs.newProductModal.show();
+            },
+
+            importProductModal: function () {
+                //show Modal
+                this.$refs.newImportProductModal.show();
+            },
+
+            importHideproductModal: function () {
+                //hide modal
+                this.$refs.newImportProductModal.hide();
+            },
+
+
+            uploadExcel: function (e) {
+                this.importData.import_file = this.$refs.importProductExcel.files[0];
+                let reader = new FileReader();
+                reader.addEventListener('load', function () {
+                    this.$refs.importFile = reader.result;
+                }.bind(this),false);
+
+                reader.readAsDataURL(this.importData.import_file);
+
+            },
+
+            importProducts: async function()
+            {
+                let formData = new FormData();
+
+                formData.append('import_file', this.importData.import_file);
+
+                try {
+                    const response = await productServices.importProduct(formData);
+                    //console.log(response);
+                    this.flashMessage.success({
+                        message: response.data.message,
+                        time: 5000
+                    });
+                    this.importHideproductModal();
+                }catch (error){
+                    this.flashMessage.error({
+                        message: error.response.data.message,
+                        time: 5000
+                    });
+                }
             },
 
             createProducts: async function(){

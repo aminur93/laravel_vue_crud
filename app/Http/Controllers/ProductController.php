@@ -6,6 +6,8 @@ use App\Category;
 use App\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
+use DB;
 
 class ProductController extends Controller
 {
@@ -174,4 +176,92 @@ class ProductController extends Controller
             ],500);
         }
     }
+
+    public function exportProduct()
+    {
+        $product = DB::table('products')
+            ->select(
+                'products.id',
+                'categories.name as cname',
+                'products.name as name',
+                'products.image as image'
+            )
+            ->join('categories','products.category_id','=','categories.id')
+            ->get()
+            ->toArray();
+
+        if (!count($product))
+        {
+            return response()->json([
+                'message' => 'Product data is empty',
+                'status_code' => 500
+            ],500);
+        }
+
+        $products[] = ['Category Name','Name','Image'];
+
+        foreach ($product as $p)
+        {
+            $products[] = [
+                'cat_name' => $p->cname,
+                'name' => $p->name,
+                'image' => $p->image
+            ];
+        }
+
+        //return $products;
+
+
+         Excel::create('excel_data', function($excel) use ($products) {
+            $excel->sheet('mySheet', function($sheet) use ($products)
+            {
+                $sheet->fromArray($products);
+            });
+        })->download('xlsx');
+
+    }
+
+    public function importProduct(Request $request)
+    {
+        $request->validate([
+            'import_file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        $path = $request->file('import_file')->getRealPath();
+
+        $data = Excel::load($path)->get();
+
+        //return $data;
+
+        if($data->count() > 0)
+        {
+
+            foreach ($data as $key => $value)
+            {
+                $arr[] = [
+                    'category_id' => $value->category_id,
+                    'name' => $value->name,
+                    'image' => $value->image
+                ];
+            }
+
+            if(!empty($arr))
+            {
+                $product = Product::insert($arr);
+
+                return response()->json([
+                    'message' => 'Product Imported Successfully',
+                    'status_code' => 200,
+                    'product' => $product
+                ],200);
+            }
+        }
+
+        return response()->json([
+            'message' => 'Product is not Imported! Something went wrong',
+            'status_code' => 500
+        ],500);
+
+    }
+
 }

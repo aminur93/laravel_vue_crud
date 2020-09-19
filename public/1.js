@@ -170,6 +170,30 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -183,6 +207,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         image: ''
       },
       moreExist: false,
+      importData: {
+        import_file: ''
+      },
+      fileName: '',
       nextPage: 0,
       editProductData: {},
       errors: {}
@@ -190,29 +218,67 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   },
   mounted: function mounted() {
     this.loadCategories();
+  },
+  created: function created() {
     this.loadProducts();
   },
   methods: {
-    loadCategories: function () {
-      var _loadCategories = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-        var response;
+    exportProductData: function () {
+      var _exportProductData = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _context.prev = 0;
                 _context.next = 3;
+                return _services_product_services__WEBPACK_IMPORTED_MODULE_1__["exportExcel"]();
+
+              case 3:
+                _context.next = 8;
+                break;
+
+              case 5:
+                _context.prev = 5;
+                _context.t0 = _context["catch"](0);
+                this.flashMessage.error({
+                  message: _context.t0.response.data.message,
+                  time: 5000
+                });
+
+              case 8:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this, [[0, 5]]);
+      }));
+
+      function exportProductData() {
+        return _exportProductData.apply(this, arguments);
+      }
+
+      return exportProductData;
+    }(),
+    loadCategories: function () {
+      var _loadCategories = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
                 return _services_product_services__WEBPACK_IMPORTED_MODULE_1__["loadCategories"]();
 
               case 3:
-                response = _context.sent;
+                response = _context2.sent;
                 this.categories = response.data;
-                _context.next = 10;
+                _context2.next = 10;
                 break;
 
               case 7:
-                _context.prev = 7;
-                _context.t0 = _context["catch"](0);
+                _context2.prev = 7;
+                _context2.t0 = _context2["catch"](0);
                 this.flashMessage.error({
                   message: 'category Data Not Found',
                   time: 5000
@@ -220,10 +286,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 10:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this, [[0, 7]]);
+        }, _callee2, this, [[0, 7]]);
       }));
 
       function loadCategories() {
@@ -233,18 +299,18 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return loadCategories;
     }(),
     loadProducts: function () {
-      var _loadProducts = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
+      var _loadProducts = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
         var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context3.prev = _context3.next) {
               case 0:
-                _context2.prev = 0;
-                _context2.next = 3;
+                _context3.prev = 0;
+                _context3.next = 3;
                 return _services_product_services__WEBPACK_IMPORTED_MODULE_1__["loadProducts"]();
 
               case 3:
-                response = _context2.sent;
+                response = _context3.sent;
                 this.products = response.data.data;
 
                 if (response.data.current_page < response.data.last_page) {
@@ -254,12 +320,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   this.moreExist = false;
                 }
 
-                _context2.next = 11;
+                _context3.next = 11;
                 break;
 
               case 8:
-                _context2.prev = 8;
-                _context2.t0 = _context2["catch"](0);
+                _context3.prev = 8;
+                _context3.t0 = _context3["catch"](0);
                 this.flashMessage.error({
                   message: 'Product Data Not Found',
                   time: 5000
@@ -267,10 +333,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 11:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this, [[0, 8]]);
+        }, _callee3, this, [[0, 8]]);
       }));
 
       function loadProducts() {
@@ -296,93 +362,43 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       //show Modal
       this.$refs.newProductModal.show();
     },
-    createProducts: function () {
-      var _createProducts = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+    importProductModal: function importProductModal() {
+      //show Modal
+      this.$refs.newImportProductModal.show();
+    },
+    importHideproductModal: function importHideproductModal() {
+      //hide modal
+      this.$refs.newImportProductModal.hide();
+    },
+    uploadExcel: function uploadExcel(e) {
+      this.importData.import_file = this.$refs.importProductExcel.files[0];
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        this.$refs.importFile = reader.result;
+      }.bind(this), false);
+      reader.readAsDataURL(this.importData.import_file);
+    },
+    importProducts: function () {
+      var _importProducts = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var formData, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                // store category into database
-                formData = new FormData();
-                formData.append('category_id', this.productData.category_id);
-                formData.append('name', this.productData.name);
-                formData.append('image', this.productData.image);
-                _context3.prev = 4;
-                _context3.next = 7;
-                return _services_product_services__WEBPACK_IMPORTED_MODULE_1__["createProducts"](formData);
-
-              case 7:
-                response = _context3.sent;
-                this.loadProducts();
-                this.hideNewProductModal();
-                this.flashMessage.success({
-                  message: response.data.message,
-                  time: 5000
-                });
-                this.productData.category_id = '', this.productData.name = '';
-                this.productData.image = '';
-                _context3.next = 24;
-                break;
-
-              case 15:
-                _context3.prev = 15;
-                _context3.t0 = _context3["catch"](4);
-                _context3.t1 = _context3.t0.response.status;
-                _context3.next = _context3.t1 === 422 ? 20 : 22;
-                break;
-
-              case 20:
-                this.errors = _context3.t0.response.data.errors;
-                return _context3.abrupt("break", 24);
-
-              case 22:
-                this.flashMessage.error({
-                  message: 'Something Went Wrong',
-                  time: 5000
-                });
-                return _context3.abrupt("break", 24);
-
-              case 24:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this, [[4, 15]]);
-      }));
-
-      function createProducts() {
-        return _createProducts.apply(this, arguments);
-      }
-
-      return createProducts;
-    }(),
-    deleteProducts: function () {
-      var _deleteProducts = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4(category) {
-        var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
           while (1) {
             switch (_context4.prev = _context4.next) {
               case 0:
-                if (window.confirm("Are you sure want to delete ".concat(category.name))) {
-                  _context4.next = 2;
-                  break;
-                }
-
-                return _context4.abrupt("return");
-
-              case 2:
+                formData = new FormData();
+                formData.append('import_file', this.importData.import_file);
                 _context4.prev = 2;
                 _context4.next = 5;
-                return _services_product_services__WEBPACK_IMPORTED_MODULE_1__["deleteProduct"](category.id);
+                return _services_product_services__WEBPACK_IMPORTED_MODULE_1__["importProduct"](formData);
 
               case 5:
                 response = _context4.sent;
-                this.loadProducts();
+                //console.log(response);
                 this.flashMessage.success({
                   message: response.data.message,
                   time: 5000
                 });
+                this.importHideproductModal();
                 _context4.next = 13;
                 break;
 
@@ -400,6 +416,118 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee4, this, [[2, 10]]);
+      }));
+
+      function importProducts() {
+        return _importProducts.apply(this, arguments);
+      }
+
+      return importProducts;
+    }(),
+    createProducts: function () {
+      var _createProducts = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var formData, response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                // store category into database
+                formData = new FormData();
+                formData.append('category_id', this.productData.category_id);
+                formData.append('name', this.productData.name);
+                formData.append('image', this.productData.image);
+                _context5.prev = 4;
+                _context5.next = 7;
+                return _services_product_services__WEBPACK_IMPORTED_MODULE_1__["createProducts"](formData);
+
+              case 7:
+                response = _context5.sent;
+                this.loadProducts();
+                this.hideNewProductModal();
+                this.flashMessage.success({
+                  message: response.data.message,
+                  time: 5000
+                });
+                this.productData.category_id = '', this.productData.name = '';
+                this.productData.image = '';
+                _context5.next = 24;
+                break;
+
+              case 15:
+                _context5.prev = 15;
+                _context5.t0 = _context5["catch"](4);
+                _context5.t1 = _context5.t0.response.status;
+                _context5.next = _context5.t1 === 422 ? 20 : 22;
+                break;
+
+              case 20:
+                this.errors = _context5.t0.response.data.errors;
+                return _context5.abrupt("break", 24);
+
+              case 22:
+                this.flashMessage.error({
+                  message: 'Something Went Wrong',
+                  time: 5000
+                });
+                return _context5.abrupt("break", 24);
+
+              case 24:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this, [[4, 15]]);
+      }));
+
+      function createProducts() {
+        return _createProducts.apply(this, arguments);
+      }
+
+      return createProducts;
+    }(),
+    deleteProducts: function () {
+      var _deleteProducts = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6(category) {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+          while (1) {
+            switch (_context6.prev = _context6.next) {
+              case 0:
+                if (window.confirm("Are you sure want to delete ".concat(category.name))) {
+                  _context6.next = 2;
+                  break;
+                }
+
+                return _context6.abrupt("return");
+
+              case 2:
+                _context6.prev = 2;
+                _context6.next = 5;
+                return _services_product_services__WEBPACK_IMPORTED_MODULE_1__["deleteProduct"](category.id);
+
+              case 5:
+                response = _context6.sent;
+                this.loadProducts();
+                this.flashMessage.success({
+                  message: response.data.message,
+                  time: 5000
+                });
+                _context6.next = 13;
+                break;
+
+              case 10:
+                _context6.prev = 10;
+                _context6.t0 = _context6["catch"](2);
+                this.flashMessage.error({
+                  message: _context6.t0.response.data.message,
+                  time: 5000
+                });
+
+              case 13:
+              case "end":
+                return _context6.stop();
+            }
+          }
+        }, _callee6, this, [[2, 10]]);
       }));
 
       function deleteProducts(_x) {
@@ -427,46 +555,46 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       reader.readAsDataURL(this.editProductData.image);
     },
     updateProduct: function () {
-      var _updateProduct = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+      var _updateProduct = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee7() {
         var formData, response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee7$(_context7) {
           while (1) {
-            switch (_context5.prev = _context5.next) {
+            switch (_context7.prev = _context7.next) {
               case 0:
                 formData = new FormData();
                 formData.append('category_id', this.editProductData.category_id);
                 formData.append('name', this.editProductData.name);
                 formData.append('image', this.editProductData.image);
                 formData.append('_method', 'put');
-                _context5.prev = 5;
-                _context5.next = 8;
+                _context7.prev = 5;
+                _context7.next = 8;
                 return _services_product_services__WEBPACK_IMPORTED_MODULE_1__["updateProduct"](this.editProductData.id, formData);
 
               case 8:
-                response = _context5.sent;
+                response = _context7.sent;
                 this.hideEditProductModal();
                 this.flashMessage.success({
                   message: response.data.message,
                   time: 5000
                 });
                 this.loadProducts();
-                _context5.next = 17;
+                _context7.next = 17;
                 break;
 
               case 14:
-                _context5.prev = 14;
-                _context5.t0 = _context5["catch"](5);
+                _context7.prev = 14;
+                _context7.t0 = _context7["catch"](5);
                 this.flashMessage.error({
-                  message: _context5.t0.response.data.message,
+                  message: _context7.t0.response.data.message,
                   time: 5000
                 });
 
               case 17:
               case "end":
-                return _context5.stop();
+                return _context7.stop();
             }
           }
-        }, _callee5, this, [[5, 14]]);
+        }, _callee7, this, [[5, 14]]);
       }));
 
       function updateProduct() {
@@ -476,20 +604,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return updateProduct;
     }(),
     loadMore: function () {
-      var _loadMore = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+      var _loadMore = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee8() {
         var _this = this;
 
         var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee8$(_context8) {
           while (1) {
-            switch (_context6.prev = _context6.next) {
+            switch (_context8.prev = _context8.next) {
               case 0:
-                _context6.prev = 0;
-                _context6.next = 3;
+                _context8.prev = 0;
+                _context8.next = 3;
                 return _services_product_services__WEBPACK_IMPORTED_MODULE_1__["loadMore"](this.nextPage);
 
               case 3:
-                response = _context6.sent;
+                response = _context8.sent;
 
                 if (response.data.current_page < response.data.last_page) {
                   this.moreExist = true;
@@ -501,12 +629,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 response.data.data.forEach(function (data) {
                   _this.products.push(data);
                 });
-                _context6.next = 11;
+                _context8.next = 11;
                 break;
 
               case 8:
-                _context6.prev = 8;
-                _context6.t0 = _context6["catch"](0);
+                _context8.prev = 8;
+                _context8.t0 = _context8["catch"](0);
                 this.flashMessage.error({
                   message: 'Some Error',
                   time: 5000
@@ -514,10 +642,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 11:
               case "end":
-                return _context6.stop();
+                return _context8.stop();
             }
           }
-        }, _callee6, this, [[0, 8]]);
+        }, _callee8, this, [[0, 8]]);
       }));
 
       function loadMore() {
@@ -576,6 +704,35 @@ var render = function() {
                     [
                       _c("span", { staticClass: "fa fa-plus" }),
                       _vm._v(" Create New")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "button" },
+                      on: { click: _vm.importProductModal }
+                    },
+                    [
+                      _c("i", { staticClass: "fas fa-file-import" }),
+                      _vm._v(" Import Product")
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "a",
+                    {
+                      staticClass: "btn btn-info",
+                      on: {
+                        click: function($event) {
+                          return _vm.exportProductData()
+                        }
+                      }
+                    },
+                    [
+                      _c("span", { staticClass: "fa fa-cloud" }),
+                      _vm._v(" Export Excel")
                     ]
                   )
                 ])
@@ -864,6 +1021,75 @@ var render = function() {
       _c(
         "b-modal",
         {
+          ref: "newImportProductModal",
+          attrs: { "hide-footer": "", title: "Import  Product" }
+        },
+        [
+          _c("div", { staticClass: "d-block" }, [
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.importProducts($event)
+                  }
+                }
+              },
+              [
+                _c("div", { staticClass: "form-group" }, [
+                  _c("label", { attrs: { for: "import" } }, [
+                    _vm._v("Import : ")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", { ref: "importFile", attrs: { type: "hidden" } }),
+                  _vm._v(" "),
+                  _c("input", {
+                    ref: "importProductExcel",
+                    staticClass: "form-control",
+                    attrs: { type: "file", name: "import_file", id: "import" },
+                    on: {
+                      change: function($event) {
+                        return _vm.uploadExcel($event)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("hr"),
+                _vm._v(" "),
+                _c("div", { staticClass: "text-right" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-default",
+                      attrs: { type: "button" },
+                      on: { click: _vm.importHideproductModal }
+                    },
+                    [_vm._v("Cancel")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { type: "submit" }
+                    },
+                    [
+                      _c("span", { staticClass: "fa fa-check" }),
+                      _vm._v(" Import Now")
+                    ]
+                  )
+                ])
+              ]
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "b-modal",
+        {
           ref: "EditProductModal",
           attrs: { "hide-footer": "", title: "Update Product" }
         },
@@ -1098,7 +1324,7 @@ render._withStripped = true
 /*!***************************************************!*\
   !*** ./resources/js/services/product_services.js ***!
   \***************************************************/
-/*! exports provided: loadCategories, createProducts, loadProducts, deleteProduct, updateProduct, loadMore */
+/*! exports provided: loadCategories, createProducts, loadProducts, deleteProduct, updateProduct, loadMore, exportExcel, importProduct */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1109,6 +1335,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deleteProduct", function() { return deleteProduct; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateProduct", function() { return updateProduct; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadMore", function() { return loadMore; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "exportExcel", function() { return exportExcel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "importProduct", function() { return importProduct; });
 /* harmony import */ var _http_services__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./http_services */ "./resources/js/services/http_services.js");
 /**
  * Created by aminur on 9/12/20.
@@ -1131,6 +1359,21 @@ function updateProduct(id, data) {
 }
 function loadMore(nextPage) {
   return Object(_http_services__WEBPACK_IMPORTED_MODULE_0__["http"])().get("/api/product?page=".concat(nextPage));
+}
+function exportExcel() {
+  return Object(_http_services__WEBPACK_IMPORTED_MODULE_0__["http"])().get('/api/export-product', {
+    responseType: 'arraybuffer'
+  }).then(function (response) {
+    var url = window.URL.createObjectURL(new Blob([response.data]));
+    var link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', 'file.xlsx');
+    document.body.appendChild(link);
+    link.click();
+  });
+}
+function importProduct(data) {
+  return Object(_http_services__WEBPACK_IMPORTED_MODULE_0__["httpFile"])().post('/api/import-product', data);
 }
 
 /***/ }),

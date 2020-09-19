@@ -44,6 +44,9 @@ Route::group(['middleware' => 'auth:api'], function(){
 
         Route::resource('product','ProductController');
 
+        Route::get('export-product','ProductController@exportProduct');
+        Route::post('import-product','ProductController@importProduct');
+
     });
 
 

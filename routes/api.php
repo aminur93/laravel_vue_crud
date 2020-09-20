@@ -20,6 +20,7 @@ Route::group(['prefix' => 'auth'], function(){
     Route::post('login','AuthController@login');
 
     Route::post('reset-password-request','AuthController@resetPasswordRequest');
+
     Route::post('reset-password','AuthController@resetPassword');
 
     Route::group(['middleware' => 'auth:api'], function(){
@@ -35,16 +36,23 @@ Route::group(['prefix' => 'auth'], function(){
 Route::group(['middleware' => 'auth:api'], function(){
 
     Route::group(['middleware' => 'scope:user'], function(){
-        Route::resource('category','CategoryController');
+
     });
 
     Route::group(['middleware' => 'scope:admin'], function(){
 
-        Route::get('get-categories','ProductController@categories');
+        //category route
+        Route::resource('category','CategoryController');
 
+        //brand routes
+        Route::get('brand','BrandController@index');
+        Route::post('brand/store','BrandController@store');
+
+        //product routes
         Route::resource('product','ProductController');
-
+        Route::get('get-categories','ProductController@categories');
         Route::get('export-product','ProductController@exportProduct');
+        Route::get('pdfProductExport','ProductController@exportPdfProduct');
         Route::post('import-product','ProductController@importProduct');
 
     });

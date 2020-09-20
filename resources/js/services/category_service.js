@@ -19,7 +19,3 @@ export function deleteCategory(id) {
 export function updateCategory(id, data) {
     return httpFile().post(`/api/category/${id}`, data);
 }
-
-export function loadMore(nextPage) {
-    return http().get(`/api/category?page=${nextPage}`);
-}

@@ -11,15 +11,16 @@
                         <div class="card-header">
                             <div class="text-left">
                                 <span>{{comName }} Management</span>
+
+                                <button type="button" v-on:click="showNewProductModal" class="btn btn-light ml-2 float-right"><span class="fa fa-plus"></span> Create New</button>
+
+                                <button type="button" v-on:click="importProductModal" class="btn btn-primary ml-2 float-right"><i class="fas fa-file-import"></i> Import Product</button>
+
+                                <a v-on:click="exportProductData()" class="btn btn-info ml-2 float-right"><span class="fa fa-cloud"></span> Export Excel</a>
+                                <a v-on:click="exportPdfProductData()" class="btn btn-success ml-2 float-right"><i class="fas fa-file-pdf"></i> Export Pdf</a>
+
                             </div>
 
-                            <div class="text-right">
-                                <button type="button" v-on:click="showNewProductModal"><span class="fa fa-plus"></span> Create New</button>
-                                <button type="button" v-on:click="importProductModal" class="btn btn-primary"><i class="fas fa-file-import"></i> Import Product</button>
-
-                                 <a v-on:click="exportProductData()" class="btn btn-info"><span class="fa fa-cloud"></span> Export Excel</a>
-
-                            </div>
                         </div>
 
                         <div class="card-body">
@@ -219,7 +220,24 @@
                     await productServices.exportExcel();
                 }catch (error){
                     this.flashMessage.error({
-                        message: error.response.data.message,
+                        message: 'Something Went Wrong',
+                        time: 5000
+                    });
+                }
+            },
+
+            exportPdfProductData: async function()
+            {
+                try{
+                    const response = await productServices.exportPdf();
+                    console.log(response);
+                    this.flashMessage.success({
+                        message: "Product Pdf Download Successfully",
+                        time: 5000
+                    });
+                }catch (error){
+                    this.flashMessage.error({
+                        message: 'Something Went Wrong',
                         time: 5000
                     });
                 }

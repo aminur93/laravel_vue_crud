@@ -142,20 +142,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "categories",
-  //        created()
-  //        {
-  //            document.querySelector('body').style.backgroundColor = '#fff';
-  //        },
   data: function data() {
     return {
       comName: "Category",
@@ -187,32 +176,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 3:
                 response = _context.sent;
-                this.categories = response.data.data;
-
-                if (response.data.current_page < response.data.last_page) {
-                  this.moreExist = true;
-                  this.nextPage = response.data.current_page + 1;
-                } else {
-                  this.moreExist = false;
-                }
-
-                _context.next = 11;
+                this.categories = response.data.categories;
+                _context.next = 10;
                 break;
 
-              case 8:
-                _context.prev = 8;
+              case 7:
+                _context.prev = 7;
                 _context.t0 = _context["catch"](0);
                 this.flashMessage.error({
                   message: 'Category Data Not Found',
                   time: 5000
                 });
 
-              case 11:
+              case 10:
               case "end":
                 return _context.stop();
             }
           }
-        }, _callee, this, [[0, 8]]);
+        }, _callee, this, [[0, 7]]);
       }));
 
       function loadCategories() {
@@ -422,57 +403,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
 
       return updateCategory;
-    }(),
-    loadMore: function () {
-      var _loadMore = _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-        var _this = this;
-
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
-          while (1) {
-            switch (_context5.prev = _context5.next) {
-              case 0:
-                _context5.prev = 0;
-                _context5.next = 3;
-                return _services_category_service__WEBPACK_IMPORTED_MODULE_1__["loadMore"](this.nextPage);
-
-              case 3:
-                response = _context5.sent;
-
-                if (response.data.current_page < response.data.last_page) {
-                  this.moreExist = true;
-                  this.nextPage = response.data.current_page + 1;
-                } else {
-                  this.moreExist = false;
-                }
-
-                response.data.data.forEach(function (data) {
-                  _this.categories.push(data);
-                });
-                _context5.next = 11;
-                break;
-
-              case 8:
-                _context5.prev = 8;
-                _context5.t0 = _context5["catch"](0);
-                this.flashMessage.error({
-                  message: 'Some Error',
-                  time: 5000
-                });
-
-              case 11:
-              case "end":
-                return _context5.stop();
-            }
-          }
-        }, _callee5, this, [[0, 8]]);
-      }));
-
-      function loadMore() {
-        return _loadMore.apply(this, arguments);
-      }
-
-      return loadMore;
     }()
   }
 });
@@ -510,12 +440,13 @@ var render = function() {
           _c("div", { staticClass: "col-md-12" }, [
             _c("div", { staticClass: "card" }, [
               _c("div", { staticClass: "card-header" }, [
-                _vm._m(0),
-                _vm._v(" "),
-                _c("div", { staticClass: "text-right" }, [
+                _c("div", { staticClass: "text-left" }, [
+                  _c("span", [_vm._v("Category Management")]),
+                  _vm._v(" "),
                   _c(
                     "button",
                     {
+                      staticClass: "btn btn-light float-right",
                       attrs: { type: "button" },
                       on: { click: _vm.showNewCategoryModal }
                     },
@@ -540,9 +471,9 @@ var render = function() {
                       }
                     },
                     [
-                      _vm._m(1),
+                      _vm._m(0),
                       _vm._v(" "),
-                      _vm._m(2),
+                      _vm._m(1),
                       _vm._v(" "),
                       _c(
                         "tbody",
@@ -595,34 +526,6 @@ var render = function() {
                           ])
                         }),
                         0
-                      )
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    {
-                      directives: [
-                        {
-                          name: "show",
-                          rawName: "v-show",
-                          value: _vm.moreExist,
-                          expression: "moreExist"
-                        }
-                      ],
-                      staticClass: "text-center"
-                    },
-                    [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-primary",
-                          on: { click: _vm.loadMore }
-                        },
-                        [
-                          _c("span", { staticClass: "fa fa-arrow-down" }),
-                          _vm._v(" Load More")
-                        ]
                       )
                     ]
                   )
@@ -882,14 +785,6 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "text-left" }, [
-      _c("span", [_vm._v("Category Management")])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
     return _c("thead", [
       _c("tr", [
         _c("th", [_vm._v("Id")]),
@@ -929,7 +824,7 @@ render._withStripped = true
 /*!***************************************************!*\
   !*** ./resources/js/services/category_service.js ***!
   \***************************************************/
-/*! exports provided: createCategories, loadCategories, deleteCategory, updateCategory, loadMore */
+/*! exports provided: createCategories, loadCategories, deleteCategory, updateCategory */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -938,7 +833,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadCategories", function() { return loadCategories; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deleteCategory", function() { return deleteCategory; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateCategory", function() { return updateCategory; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "loadMore", function() { return loadMore; });
 /* harmony import */ var _http_services__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./http_services */ "./resources/js/services/http_services.js");
 /**
  * Created by aminur on 9/7/20.
@@ -955,9 +849,6 @@ function deleteCategory(id) {
 }
 function updateCategory(id, data) {
   return Object(_http_services__WEBPACK_IMPORTED_MODULE_0__["httpFile"])().post("/api/category/".concat(id), data);
-}
-function loadMore(nextPage) {
-  return Object(_http_services__WEBPACK_IMPORTED_MODULE_0__["http"])().get("/api/category?page=".concat(nextPage));
 }
 
 /***/ }),

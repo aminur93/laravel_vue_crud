@@ -25,7 +25,21 @@ const routes = [
                 name: 'category',
                 component: () => import('./views/Categories.vue'),
                 beforeEnter(to, from, next){
-                    if(authService.getUserRole() === 'user')
+                    if(authService.getUserRole() === 'admin')
+                    {
+                        next();
+                    }else {
+                        next('/404');
+                    }
+                }
+            },
+
+            {
+                path: 'brand',
+                name: 'brand',
+                component: () => import('./views/Brand.vue'),
+                beforeEnter(to, from, next){
+                    if(authService.getUserRole() === 'admin')
                     {
                         next();
                     }else {

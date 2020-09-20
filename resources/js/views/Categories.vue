@@ -11,10 +11,7 @@
                         <div class="card-header">
                             <div class="text-left">
                                 <span>Category Management</span>
-                            </div>
-                            
-                            <div class="text-right">
-                                <button type="button" v-on:click="showNewCategoryModal"><span class="fa fa-plus"></span> Create New</button>
+                                <button type="button" v-on:click="showNewCategoryModal" class="btn btn-light float-right"><span class="fa fa-plus"></span> Create New</button>
                             </div>
                         </div>
                         
@@ -48,6 +45,7 @@
                                             <button class="btn btn-sm btn-primary" v-on:click="editCategory(category)">
                                                 <span class="fa fa-edit"></span>
                                             </button>
+
                                             <button class="btn btn-sm btn-danger" v-on:click="deleteCategory(category)">
                                                 <span class="fa fa-trash"></span>
                                             </button>
@@ -55,11 +53,6 @@
                                     </tr>
                                     </tbody>
                                 </table>
-
-                                <div class="text-center" v-show="moreExist">
-                                    <button class="btn btn-primary" v-on:click="loadMore"><span class="fa fa-arrow-down"></span> Load More</button>
-                                </div>
-
 
                             </div>
                         </div>
@@ -134,10 +127,7 @@
 
     export default {
         name: "categories",
-//        created()
-//        {
-//            document.querySelector('body').style.backgroundColor = '#fff';
-//        },
+
         data(){
             return{
                 comName: "Category",
@@ -163,15 +153,9 @@
 
                 try {
                     const response = await categoryServices.loadCategories();
-                    this.categories = response.data.data;
 
-                    if(response.data.current_page < response.data.last_page)
-                    {
-                        this.moreExist = true;
-                        this.nextPage = response.data.current_page + 1;
-                    }else {
-                        this.moreExist = false;
-                    }
+                    this.categories = response.data.categories;
+
                 }catch (error){
                     this.flashMessage.error({
                         message: 'Category Data Not Found',
@@ -323,28 +307,6 @@
                     });
                 }
             },
-
-            loadMore: async function(){
-                try{
-                    const response = await categoryServices.loadMore(this.nextPage);
-                    if(response.data.current_page < response.data.last_page)
-                    {
-                        this.moreExist = true;
-                        this.nextPage = response.data.current_page + 1;
-                    }else {
-                        this.moreExist = false;
-                    }
-
-                    response.data.data.forEach(data =>{
-                        this.categories.push(data);
-                    });
-                }catch (error){
-                    this.flashMessage.error({
-                        message: 'Some Error',
-                        time: 5000
-                    });
-                }
-            }
         }
     }
 </script>

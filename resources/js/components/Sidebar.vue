@@ -10,9 +10,14 @@
                     </router-link>
                     <div class="sb-sidenav-menu-heading">Interface</div>
     
-                    <router-link v-if="$store.state.profile.role == 'user'" to="/home/category" class="nav-link" exact>
+                    <router-link v-if="$store.state.profile.role == 'admin'" to="/home/category" class="nav-link" exact>
                         <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                         Category
+                    </router-link>
+
+                    <router-link v-if="$store.state.profile.role == 'admin'" to="/home/brand" class="nav-link" exact>
+                        <div class="sb-nav-link-icon"><i class="fas fa-magic"></i></div>
+                        Brand
                     </router-link>
 
                     <router-link v-if="$store.state.profile.role == 'admin'" to="/home/products" class="nav-link" exact>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Product;
+use PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
@@ -215,10 +216,37 @@ class ProductController extends Controller
          Excel::create('excel_data', function($excel) use ($products) {
             $excel->sheet('mySheet', function($sheet) use ($products)
             {
-                $sheet->fromArray($products);
+                $sheet->fromArray($products, null, 'A1', false, false);
             });
         })->download('xlsx');
 
+    }
+
+    public function exportPdfProduct()
+    {
+        $product = DB::table('products')
+            ->select(
+                'products.id',
+                'categories.name as cname',
+                'products.name as name',
+                'products.image as image'
+            )
+            ->join('categories','products.category_id','=','categories.id')
+            ->get()
+            ->toArray();
+
+        if (!count($product))
+        {
+            return response()->json([
+                'message' => 'Product data is empty',
+                'status_code' => 500
+            ],500);
+        }
+
+
+        $pdf = PDF::loadView('pdf', compact('product'));
+
+        return $pdf->download('product.pdf');
     }
 
     public function importProduct(Request $request)
